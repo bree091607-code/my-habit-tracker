@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#202127">
+<meta name="description" content="A gentle daily habit tracker">
+<title>My Daily Habit Tracker</title>
+<style>
+:root{color-scheme:dark;--bg:#202127;--panel:#292c35;--card:#2b2e36;--blue:#3977fa;--green:#32ad62;--muted:#b2b5c1;--line:#393c45}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f1f2f7;font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:18px 14px 36px}
+main{max-width:760px;margin:auto}.head{display:flex;gap:12px;align-items:center;margin:6px 0 18px}.logo{background:#303747;color:#78a0ff;border-radius:16px;width:48px;height:48px;display:grid;place-items:center;font-size:25px}.sub{color:#a9adba;font-size:14px;margin-top:3px}
+.panel{background:var(--panel);border-radius:24px;padding:18px;margin-bottom:18px}.stats{display:flex;align-items:center;gap:18px}.ring{width:124px;height:124px;flex:0 0 124px}.statcopy{flex:1}.count{font-size:23px;font-weight:700}.muted{color:var(--muted)}.small{font-size:13px}.week{display:grid;grid-template-columns:repeat(7,1fr);gap:9px;align-items:end;margin-top:12px}.daybar{border:0;background:transparent;color:#b5b8c4;padding:0;cursor:pointer;font:inherit;min-width:0}.bar{height:72px;background:#383b45;border-radius:9px;display:flex;align-items:end;overflow:hidden;margin-bottom:5px}.fill{width:100%;background:#4266b4;border-radius:8px 8px 0 0;min-height:4px}.daybar.selected .fill{background:var(--blue)}.daybar.selected{color:#83a8ff;font-weight:700}.daybar.complete .fill{background:var(--green)}
+h2{font-size:17px;margin:20px 0 10px;color:#dce2f3}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#30333c;border-radius:999px;padding:5px;margin-bottom:16px}.days button{border:0;background:transparent;color:#b3b6c1;border-radius:999px;padding:10px 0;font-weight:600;font-size:14px;cursor:pointer}.days button.active{background:var(--blue);color:white}
+.group-title{font-size:13px;font-weight:750;letter-spacing:.07em;color:#aeb9d2;margin:20px 0 9px;display:flex;align-items:center;gap:8px}.habit{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid var(--line);border-radius:18px;padding:14px;margin:9px 0;background:var(--card);color:inherit;cursor:pointer}.habit.done{background:#272e3c;border-color:#344f87}.symbol{width:46px;height:46px;flex:0 0 46px;border-radius:50%;background:#373a43;display:grid;place-items:center;font-size:22px}.done .symbol{background:var(--blue)}.info{flex:1;min-width:0}.title{font-size:16px;font-weight:700}.desc{font-size:13px;color:var(--muted);margin-top:3px}.pill{font-size:13px;font-weight:700;border-radius:999px;background:#383b44;color:#b7bac5;padding:9px 12px;white-space:nowrap}.done .pill{background:var(--green);color:white}.note{background:var(--panel);border-radius:18px;padding:15px;color:#c0c3ce;font-size:14px;margin-top:20px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}button.action{border:1px solid #4a4e5a;background:#30333c;color:#eef0f8;border-radius:13px;padding:12px 14px;font-weight:650;cursor:pointer}.footer{color:#9297a5;font-size:12px;text-align:center;margin:16px 4px}
+@media(max-width:390px){body{padding:12px 10px 28px}.panel{padding:14px}.stats{gap:10px}.ring{width:106px;height:106px;flex-basis:106px}.count{font-size:20px}.habit{padding:11px;gap:9px}.symbol{width:40px;height:40px;flex-basis:40px}.title{font-size:14px}.desc{font-size:12px}.pill{padding:8px;font-size:12px}.days button{font-size:12px}}
+</style>
+</head>
+<body><main>
+<header class="head"><div class="logo">✓</div><div><h1 style="font-size:23px;margin:0">My Daily Habit Tracker</h1><div class="sub">Small steps. Consistent habits. Progress, not perfection.</div></div></header>
+<section class="panel">
+ <div class="stats">
+  <svg class="ring" viewBox="0 0 120 120" aria-label="Daily progress"><circle cx="60" cy="60" r="48" stroke="#41444e" stroke-width="10" fill="none"/><circle id="ring" cx="60" cy="60" r="48" stroke="#3977fa" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="0 301.6" transform="rotate(-90 60 60)"/><text id="pct" x="60" y="57" fill="#f3f4f8" font-size="23" font-weight="600" text-anchor="middle">0%</text><text x="60" y="76" fill="#aeb3c1" font-size="10" text-anchor="middle">TODAY</text></svg>
+  <div class="statcopy"><div class="count">✓ <span id="count">0 of 8 done</span></div><div id="encourage" class="muted" style="margin-top:7px">A fresh day is a fresh start.</div><div class="muted small" style="margin-top:7px">Selected day: <span id="selectedLabel">Mon</span></div></div>
+ </div>
+ <hr style="border:0;border-top:1px solid #41444e;margin:18px 0 12px">
+ <div style="display:flex;justify-content:space-between;align-items:center"><strong>Weekly overview</strong><span id="weekpct" style="color:#9eb9ff">0%</span></div>
+ <div class="week" id="week"></div>
+</section>
+<h2>Selected Day Workspace</h2><div class="days" id="days"></div>
+<div id="habits"></div>
+<div class="note"><strong style="color:#f1f2f7">💙 A little reminder</strong><br>You don't have to do everything perfectly. Eat regularly, move in a way you enjoy, and respond kindly to urges. If a habit doesn't happen today, you can simply start again tomorrow.</div>
+<div class="actions"><button class="action" id="copy">▣ Copy checklist</button><button class="action" id="reset">Reset this day</button></div>
+<div class="footer">Your checkmarks are saved on this device in this browser. They aren't synced to other devices.</div>
+</main>
+<script>
+const dayNames=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const habits=[
+{id:"wake",group:"MORNING ROUTINE",icon:"🌅",title:"Wake up at 7–8 AM",desc:"Put on shoes immediately after waking up"},
+{id:"move",group:"MORNING ROUTINE",icon:"🏃",title:"Morning movement",desc:"Run or walk outside"},
+{id:"brush",group:"MORNING ROUTINE",icon:"☀️",title:"Morning brush",desc:"Brush teeth right after coming inside"},
+{id:"meal1",group:"MEAL & DRINK WINDOWS",icon:"🍴",title:"First healthy meal",desc:"Eat between 9 AM and 2 PM"},
+{id:"meal2",group:"MEAL & DRINK WINDOWS",icon:"🍽️",title:"Second healthy meal",desc:"Eat between 5 PM and 8 PM"},
+{id:"caffeine",group:"MEAL & DRINK WINDOWS",icon:"☕",title:"Reduced caffeine",desc:"Stop Sparkling Ice after first meal; swap for water"},
+{id:"nails",group:"DAILY MINDFULNESS",icon:"✋",title:"No nail-biting",desc:"Use bitter polish or a nail file instead"},
+{id:"urges",group:"DAILY MINDFULNESS",icon:"💗",title:"Managed binge urges",desc:"Pause, take a breath, and ride out the urge with kindness"}
+];
+let selected="Mon", state={};
+try{state=JSON.parse(localStorage.getItem("habit-tracker-v1")||"{}")}catch(e){state={}}
+function list(d){return state[d]||[]}
+function save(){try{localStorage.setItem("habit-tracker-v1",JSON.stringify(state))}catch(e){}}
+function choose(d){selected=d;render()}
+function toggle(id){let a=list(selected).slice();a=a.includes(id)?a.filter(x=>x!==id):[...a,id];state[selected]=a;save();render()}
+function render(){
+ const n=list(selected).length,p=Math.round(n/8*100);
+ document.getElementById("ring").setAttribute("stroke-dasharray",`${p*3.016} 301.6`);
+ document.getElementById("pct").textContent=p+"%";document.getElementById("count").textContent=`${n} of 8 done`;
+ document.getElementById("selectedLabel").textContent=selected;
+ document.getElementById("encourage").textContent=p===100?"Amazing! You completed every habit today!":n===0?"A fresh day is a fresh start.":"Keep going at your own pace.";
+ let total=dayNames.reduce((s,d)=>s+list(d).length,0);document.getElementById("weekpct").textContent=Math.round(total/56*100)+"%";
+ document.getElementById("week").innerHTML=dayNames.map(d=>`<button class="daybar ${d===selected?"selected":""} ${list(d).length===8?"complete":""}" data-day="${d}"><div class="bar"><div class="fill" style="height:${Math.max(5,list(d).length/8*100)}%"></div></div>${d}</button>`).join("");
+ document.getElementById("days").innerHTML=dayNames.map(d=>`<button class="${d===selected?"active":""}" data-day="${d}">${d}</button>`).join("");
+ let last="";let out="";
+ habits.forEach(h=>{if(h.group!==last){out+=`<div class="group-title">${h.group}</div>`;last=h.group}let done=list(selected).includes(h.id);out+=`<button class="habit ${done?"done":""}" data-habit="${h.id}" aria-pressed="${done}"><span class="symbol">${h.icon}</span><span class="info"><span class="title" style="display:block">${h.title}</span><span class="desc" style="display:block">${h.desc}</span></span><span class="pill">${done?"✓ Done":"Mark"}</span></button>`});
+ document.getElementById("habits").innerHTML=out;
+ document.querySelectorAll("[data-day]").forEach(b=>b.addEventListener("click",()=>choose(b.dataset.day)));
+ document.querySelectorAll("[data-habit]").forEach(b=>b.addEventListener("click",()=>toggle(b.dataset.habit)));
+}
+document.getElementById("reset").addEventListener("click",()=>{if(confirm(`Reset all checkmarks for ${selected}?`)){state[selected]=[];save();render()}});
+document.getElementById("copy").addEventListener("click",async()=>{let txt=`DAILY HABIT TRACKER — ${selected}\n`+habits.map(h=>`${list(selected).includes(h.id)?"[x]":"[ ]"} ${h.title}\n    ${h.desc}`).join("\n")+`\n\nProgress: ${list(selected).length}/8 (${Math.round(list(selected).length/8*100)}%)`;try{await navigator.clipboard.writeText(txt);document.getElementById("copy").textContent="✓ Copied!"}catch(e){prompt("Copy your checklist:",txt)}});
+render();
+</script></body></html>
